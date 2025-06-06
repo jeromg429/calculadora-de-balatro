@@ -18,7 +18,9 @@ def fobservatory(planetcards,m):
     return m
 
 handt=str(input("played hand: "))
+hands_remaining=int(input("hands remaining: "))
 cards_scored=int(input("cards scored: "))
+cards_in_hand=int(input("cards in hand: "))
 level=int(input("hand level: "))
 level-=1
 
@@ -71,16 +73,6 @@ else:
     elif bb== "the flint":
         mult/=2
         chips/=2
-        
-class Card:
-    def __init__(self,rank,suit,enhancement,edition,has_redseal,is_facecard,is_debuffed):
-        self.rank=rank
-        self.suit=suit
-        self.enhancement=enhancement
-        self.edition=edition
-        self.has_redseal=has_redseal
-        self.is_facecard=is_facecard
-        self.is_debuffed=is_debuffed
 
 played_hand=[]
         
@@ -103,8 +95,38 @@ for n in range(1,cards_scored+1):
     debuffed=str(input("is card debuffed? (y/n): "))
     if debuffed=="y": debuffed=True
     else: debuffed==False
-    card=Card((rank,suit,enhancement,edition,redseal,facecard,debuffed))
+    card=(rank,suit,enhancement,edition,redseal,facecard,debuffed)
     played_hand.append(card)
+
+in_hand=[]
+q_in_hand=0
+k_in_hand=0
+
+for n in range(1,cards_in_hand+1):
+    print(f"~~~~~ card {n} ~~~~~")
+    rank=str(input("card rank: "))
+    if rank=="j":rank=10
+    elif rank=="q": rank=10 ; q_in_hand+=1
+    elif rank=="k": rank=10 ; k_in_hand+=1
+    elif rank=="a": rank=11
+    else: rank=int(rank)
+    
+    suit=str(input("card suit: "))
+    enhancement=str(input("card enhancement: "))
+    edition=str(input("card edition: "))
+    if edition=="": edition="normal"
+    redseal=str(input("card has redseal? (y/n): "))
+    if redseal=="y": redseal=True
+    else: redseal==False
+    facecard=str(input("is card a facecard? (y/n): "))
+    if facecard=="y": facecard=True
+    else: facecard==False
+    debuffed=str(input("is card debuffed? (y/n): "))
+    if debuffed=="y": debuffed=True
+    else: debuffed==False
+    card=(rank,suit,enhancement,edition,redseal,facecard,debuffed)
+    in_hand.append(card)
+
 
 joker_slots=int(input("how many joker slots? "))
 jokers=int(input("how many jokers? "))
@@ -120,5 +142,47 @@ for n in range(1,jokers+1):
     
 #and now for my next trick, I will code what *ALL* (score related) jokers in game do... plesase help hahahahhah
 
-#activation type: on score
+#activation type: on played
+def f_dna(object): object.append(object[-1])
+def f_dusk(phand,handsr):
+    if handsr!=1:
+        pass
+    '''here will go the code for dusk joker when i figure out how to code retriggers lol'''
+def f_hack(phand):
+    for card in phand:
+        if card[0]<5:
+            pass #same as dusk, will code when I figure out how to code retriggers
 
+#activation type on scored
+def f_greedy(pcard,m):
+    if pcard[1]=="diamonds":
+        m+=5
+        return m
+def f_lusty(pcard,m):
+    if pcard[1]=="hearts":
+        m+=5
+        return m
+def f_wrathful(pcard,m):
+    if pcard[1]=="spades":
+        m+=5
+        return m
+def f_gluttonous(pcard,m):
+    if pcard[1]=="clubs":
+        m+=5
+        return m
+def f_fibonacci(pcard,m):
+    if pcard[0]==11 or pcard[0]==2 or pcard[0]==3 or pcard[0]==5 or pcard[0]==8:
+        m+=8
+        return m
+def f_scaryface(pcard,c):
+    if pcard[5]==True:
+        c+=30
+        return c
+def f_evensteven(pcard,c):
+    if pcard[0]%2==0:
+        m+=4
+        return m
+def f_oddtodd(pcard,c):
+    if pcard[0]%2!=0:
+        c+=31
+        return c
