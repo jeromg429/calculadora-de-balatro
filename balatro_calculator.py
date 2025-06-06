@@ -1,5 +1,8 @@
 from random import *
 
+print("disclaimer: if you are using four fingers and the tribe or any other flush related joker, please kys <3")
+print("im so done with trying to code the interaction of these two")
+
 mult=0
 chips=0
 
@@ -10,6 +13,8 @@ else:plasma=False
 observatory=str(input("redmeemed observatory voucher??(y/n): "))
 if observatory=="y": observatory=True
 else: observatory=False
+
+most_played=str(input("most played hand type: "))
 
 def fplasma(m,c):
     c=((m+c)/2)**2
@@ -141,13 +146,16 @@ joker_list=[]
 oops=0
 smeared=False
 pareidolia=False
+shortcut=False
+fourfingers=False
 
 for n in range(1,jokers+1):
     print(f"~~~~~ joker #{n} ~~~~~")
     joker=str(input("joker name: "))
     joker_edition=str(input("joker edition: "))
     if joker_edition=="": joker_edition="normal"
-    joker=(joker,joker_edition)
+    joker_rarity=str(input("joker rarity: "))
+    joker=(joker,joker_edition,joker_rarity)
     joker_list.append(joker)
     
 #and now for my next trick, I will code what *ALL* (score related) jokers in game do... plesase help hahahahhah
@@ -202,6 +210,16 @@ def f_pareidolia(phand,pareidolia_value):
         for card in phand:
             card[5]=True
         return phand
+def f_shortcut(shortcut_value):
+    for joker in joker_list:
+        if joker[0]=="shortcut":
+            shortcut_value=True
+def f_fourfingers(fourfingers_value):
+    for joker in joker_list:
+        if joker[0]=="four fingers":
+            fourfingers_value=True
+    return fourfingers_value
+#activation type: on played
 def f_greedy(pcard,smeared_value,m):
     if smeared_value==False:
         if pcard[1]=="diamonds" or pcard[2]=="wild card":
@@ -401,4 +419,32 @@ def f_thetribe(thand,phand,m):
 def f_theorder(thand,m):
     if thand=="straight flush" or thand=="straight":
         m*=3
+    return m
+def f_jokerstencil(joker_list,joker_slot,jokerq,m):
+    for joker in joker_list:
+        if joker[0]=="jokers stencil":
+            joker_slot+=1
+        joker_slot+=jokerq
+        m*=joker_slot
+    return m
+#activation type: mixed
+def f_obelisk(thand,mphand,currentm,m):
+    if thand==mphand: return m
+    else:
+        currentm+=0.2
+        m*=currentm
+        return m
+def f_weej(phand,currentc,c):
+    for card in phand:
+        if card[0]==2: currentc+=8
+    c+=currentc
+    return c
+def f_hittheroad(xm,m):
+    m*=xm
+    return m
+#activation type: on other jokers
+def f_baseballcard(joker_list,m):
+    for joker in joker_list:
+        if joker[2]=="uncommon":
+            m*=1.5
     return m
